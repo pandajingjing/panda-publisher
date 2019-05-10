@@ -1,0 +1,13 @@
+sRepoType='git'
+sRepoUrl='git@git.release.weiheinc.com:infrastructure/php-index.git'
+sRepoSubDir='php-index'
+
+sRepoMaster='master'
+sRepoMerge=''
+
+sAnsibleFiles='upload_single'
+
+sDestDir=$sAppRootDir'/index'
+sLoader=''
+
+sRepoConfigVars=''

@@ -1,0 +1,13 @@
+[webservers]
+101.132.164.163
+139.224.239.217
+
+[newwebservers]
+47.101.194.70 ansible_ssh_port=54729
+47.100.197.107 ansible_ssh_port=54729
+
+[nuxt]
+101.132.36.105
+
+[devservers]
+106.14.166.40

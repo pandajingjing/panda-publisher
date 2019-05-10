@@ -1,0 +1,14 @@
+-   hosts: "{{ sDeployServer }}"
+    remote_user: "{{ sDeployUser }}"
+    tasks:
+    -   name: "create dir {{ sAppVersionDir }}"
+        file:
+            path: "{{ sAppVersionDir }}"
+            state: directory
+            mode: 0775
+            group: "{{ sDeployGroup }}"
+            owner: "{{ sDeployUser }}"
+    -   name: change the version
+        shell: "echo {{ _sVersion }} > code_{{ sLoader }}_web.ver && echo {{ _sVersion }} > console_{{ sLoader }}_console.ver"
+        args:
+            chdir: "{{ sAppVersionDir }}"

@@ -1,0 +1,18 @@
+-   hosts: "{{ sDeployServer }}"
+    remote_user: "{{ sDeployUser }}"
+    tasks:
+    -   name: "create dir {{ sDestDir }}"
+        file:
+            path: "{{ sDestDir }}"
+            state: directory
+            mode: 0775
+            group: "{{ sDeployGroup }}"
+            owner: "{{ sDeployUser }}"
+    -   name: "extract {{ _sCodeTarFilePath }} to {{ sDestDir }}"
+        unarchive:
+            src: "{{ _sCodeTarFilePath }}"
+            dest: "{{ sDestDir }}"
+            mode: 0775
+            group: "{{ sDeployGroup }}"
+            owner: "{{ sDeployUser }}"
+            remote_src: no

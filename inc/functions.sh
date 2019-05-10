@@ -1,0 +1,324 @@
+#main functions
+
+#show some messages
+function showMessage(){
+    _sMessage=`/bin/date +"%Y-%m-%d %H:%M:%S"`'('"$1"'): '"$2"
+    case $1 in
+        error)
+        /bin/echo -e "\033[31m$_sMessage\033[0m"
+        ;;
+        warn)
+        /bin/echo -e "\033[33m$_sMessage\033[0m"
+        ;;
+        debug)
+        /bin/echo -e "\033[37m$_sMessage\033[0m"
+        ;;
+        *)
+        /bin/echo "$_sMessage"
+        ;;
+    esac
+}
+
+#show info message
+function showInfo(){
+    showMessage 'info' "$1"
+}
+
+#show warning message
+function showWarning(){
+    showMessage 'warn' "$1"
+}
+
+#show error message
+function showError(){
+    showMessage 'error' "$1"
+    exit 1
+}
+
+#show debug message
+function showDebug(){
+    if [ $iDebug -eq 1 ]; then
+        showMessage 'debug' "$1"
+    elif [ $iDebug -eq 2 ]; then
+        showMessage 'debug' "$1"
+        read -t 10 -p 'press enter to continue...'
+    fi
+}
+
+#show help we need
+function showHelp() {
+    /bin/echo 'Usage: '`basename $1`' -p repo [-r [-v version]]'
+    /bin/echo `basename $1 .sh`' repo in the newest or reverse last version or specific version'
+    /bin/echo 'we currently support git'
+    /bin/echo '  -p repo'
+    /bin/echo '  -r reverse'
+    /bin/echo '  -v specific version'
+    /bin/echo '  -h show this help'
+    exit 0
+}
+
+#create dir
+function createDir(){
+    showDebug 'create dir: '"$1"' start.'
+    if [ -d $1 ]; then
+        showDebug 'dir '"$1"' is exists.'
+        if [ ! -z $2 ]; then
+            showDebug "$1"' will be cleaned.'
+            /bin/rm -rf "$1"
+            /bin/mkdir -p "$1"
+        fi
+    else
+        /bin/mkdir -p "$1"
+    fi
+    showDebug 'create dir: '"$1"' successfully.'
+}
+
+#parse what todo
+function parseBin(){
+    sReverse='no'
+    sReverseVersion='last'
+    while getopts 'p:v:h:r' arg; do
+        case $arg in
+            v) sReverseVersion=$OPTARG
+                ;;
+            p) sRepoName=$OPTARG
+                ;;
+            r) sReverse='yes'
+                ;;
+            h) showHelp $0
+                ;;
+            ?) showHelp $0
+                ;;
+        esac
+    done
+	
+    showDebug 'repo name we got was: '"$sRepoName"'.'
+    showDebug 'whether reverse we got was: '"$sReverse"'.'
+    showDebug 'version we got was: '"$sReverseVersion"'.'
+
+    if [ -z $sRepoName ]; then
+        showHelp $0
+    fi
+    
+    sExecRepoDir=$sExecRepoRootDir'/'$sRepoName
+    showDebug 'repo dir is: '"$sExecRepoDir"'.'
+        	
+    if [ ! -d $sExecRepoDir ]; then
+        showError 'repo('"$sRepoName"') does not exist.'
+    fi
+}
+
+#load repo file
+function loadRepoFile(){
+    sExecRepoFile=$sExecRepoDir'/'$1
+    if [ -f $sExecRepoFile ];then
+        showDebug 'load repo '"$1"' file: '"$sExecRepoFile"'.'
+        source $sExecRepoFile
+    else
+        showError "$sExecRepoFile"' does not exist.'
+    fi
+}
+
+#get repo
+function getRepo(){
+    _sRepoType=$1
+    _sRepoUrl=$2
+    _sCodeDir=$3
+    showInfo 'get repo from remote.'
+    case "$_sRepoType" in
+        git)
+            showDebug 'git clone from '"$_sRepoUrl"' to '"$_sCodeDir"'.'
+            $sExecGit clone -q $_sRepoUrl $_sCodeDir
+            ;;
+        ?) showError 'unsupport repo type: '"$_sRepoType"'.'
+            ;;
+    esac
+    if [ 0 -ne $? ]; then
+        showError 'can not get repo from remote.'
+    fi
+}
+
+#check repo whether its right repo
+function checkRepo(){
+    _sRepoType=$1
+    _sRepoUrl=$2
+    showInfo 'check repo whether its right repo.'
+    case "$_sRepoType" in
+        git)
+            _sCurrentUrl=`$sExecGit remote get-url origin`
+            if [ $_sCurrentUrl = $_sRepoUrl ]; then
+                return 1
+            else
+                return 0
+            fi
+            ;;
+        *) showError 'unsupport repo type: '"$_sRepoType"'.'
+            ;;
+    esac 
+}
+
+#fetch repo
+function fetchRepo(){
+    _sRepoType=$1
+    showInfo 'fetch repo from remote.'
+    case "$_sRepoType" in
+        git)
+            showDebug 'git fetch origin.'
+            $sExecGit fetch -q origin
+            ;;
+        *) showError 'unsupport repo type: '"$_sRepoType"'.'
+            ;;
+    esac
+    if [ 0 -ne $? ]; then
+        showError 'can not fetch repo from remote.'
+    fi
+}
+
+#check branch
+function _checkBranch(){
+    _sRepoType=$1
+    _sBranch=$2
+    showDebug 'check branch status.'
+    case "$_sRepoType" in
+        git)
+            $sExecGit branch | /bin/grep "$_sBranch" > /dev/null
+            if [ 0 -eq $? ]; then
+                showDebug 'we got local branch('"$_sBranch"').'
+                $sExecGit branch | /bin/grep "* $_sBranch" > /dev/null
+                if [ 0 -eq $? ]; then
+                    showDebug 'we got current branch.'
+                    return 2
+                else
+                    showDebug 'we have local branch, but not current branch.'
+                    return 1
+                fi
+            else #we dont get local branch
+                showDebug 'we dont get local branch('"$_sBranch"').'
+                return 0
+            fi
+            ;;
+        *) showError 'unsupport repo type: '"$_sRepoType"'.'
+            ;;
+    esac
+}
+
+#switch branch
+function switchBranch(){
+    _sRepoType=$1
+    _sBranch=$2
+    showInfo 'switch branch to '"$_sBranch"'.'
+    case "$_sRepoType" in
+        git)
+            _checkBranch $_sRepoType $_sBranch
+            _iReturn=$?
+            if [ 2 -eq $_iReturn ]; then
+                showDebug 'we do nothing.'
+            elif [ 1 -eq $_iReturn ]; then
+                showDebug 'git checkout '"$_sBranch"' from local.'
+                $sExecGit checkout -q "$_sBranch"
+            else
+                showDebug 'git checkout '"$_sBranch"' from origin.'
+                $sExecGit checkout -q -b "$_sBranch" "origin/$_sBranch"
+            fi
+            ;;
+        *) showError 'unsupport repo type: '"$_sRepoType"'.'
+            ;;
+    esac
+    if [ 0 -ne $? ]; then
+        showError 'can not switch branch to '"$_sBranch"'.'
+    fi
+}
+
+#rebase branch
+function rebaseBranch(){
+    _sRepoType=$1
+    _sBranch=$2
+    showInfo 'rebase branch from '"$_sBranch"'.'
+    case "$_sRepoType" in
+        git)
+            showDebug 'git rebase orgin/'"$_sBranch"'.'
+            $sExecGit rebase -q "origin/$_sBranch"
+            ;;
+        *) showError 'unsupport repo type: '"$_sRepoType"'.'
+            ;;
+    esac
+    if [ 0 -ne $? ]; then
+        showError 'can not rebase branch from '"$_sBranch"'.'
+    fi
+}
+
+#merge branch
+function mergeBranch(){
+    _sRepoType=$1
+    _sBranch=$2
+    _sComment=$3
+    showInfo 'merge branch from '"$_sBranch"'.'
+    case "$_sRepoType" in
+        git)
+            showDebug 'git merge '"$_sBranch"' with comment: '"$_sComment"'.'
+            $sExecGit merge -q --no-ff $_sBranch -m "$_sComment"
+            ;;
+        *) showError 'unsupport repo type: '"$_sRepoType"'.'
+            ;;
+    esac
+    if [ 0 -ne $? ]; then
+        showError 'can not merge branch from '"$_sBranch"'.'
+    fi
+}
+
+#push branch
+function pushBranch(){
+    _sRepoType=$1
+    _sBranch=$2
+    showInfo 'push branch('"$_sBranch"') to remote.'
+    case "$_sRepoType" in
+        git)
+            showDebug 'git push origin '"$_sBranch:$_sBranch"'.'
+            $sExecGit push -q origin "$_sBranch:$_sBranch"
+            ;;
+        *) showError 'unsupport repo type: '"$_sRepoType"'.'
+            ;;
+    esac
+    if [ 0 -ne $? ]; then
+        showError 'can not push branch('"$_sBranch"') to remote.'
+    fi
+}
+
+#tag branch
+function tagBranch(){
+    _sRepoType=$1
+    _sTag=$2
+    _sBranch=$3
+    showInfo 'make tag('"$_sTag"') on '"$_sBranch"'.'
+    case "$_sRepoType" in
+        git)
+            showDebug 'git tag '"$_sTag"'.'
+            $sExecGit tag "$_sTag"
+            $sExecGit push -q origin "$_sBranch:$_sBranch"
+            ;;
+        *) showError 'unsupport repo type: '"$_sRepoType"'.'
+            ;;
+    esac
+    if [ 0 -ne $? ]; then
+        showError 'can not make tag ('"$_sTag"') on '"$_sBranch"'.'
+    fi
+}
+
+#export code tar
+function exportCodeTar(){
+    _sRepoType=$1
+    _sBranch=$2
+    _sCodeTarFilePath=$3
+    showInfo 'export '"$_sBranch"' into '"$_sCodeTarFilePath"'.'
+    case "$_sRepoType" in
+        git)
+            showDebug 'git archive '"$_sBranch"' into '"$_sCodeTarFilePath"'.'
+            $sExecGit archive --format 'tar.gz' --output "$_sCodeTarFilePath" $_sBranch
+            ;;
+        *) showError 'unsupport repo type: '"$_sRepoType"'.'
+            ;;
+    esac
+    if [ 0 -ne $? ]; then
+        showError 'can not export '"$_sBranch"' into '"$_sCodeTarFilePath"'.'
+    fi
+}

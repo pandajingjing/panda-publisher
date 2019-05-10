@@ -1,0 +1,7 @@
+-   hosts: "{{ sDeployServer }}"
+    remote_user: "{{ sDeployUser }}"
+    tasks:
+    -   name: clear laravel cache
+        command: "{{ sExecRemotePhp }} console_release.php cache:clear {{ sLoader }}"
+        args:
+            chdir: "{{ sAppIndexDir }}"
