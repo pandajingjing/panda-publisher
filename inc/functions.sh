@@ -236,7 +236,7 @@ function rebaseBranch(){
     showInfo 'rebase branch from '"$_sBranch"'.'
     case "$_sRepoType" in
         git)
-            showDebug 'git rebase orgin/'"$_sBranch"'.'
+            showDebug 'git rebase origin/'"$_sBranch"'.'
             $sExecGit rebase -q "origin/$_sBranch"
             ;;
         *) showError 'unsupport repo type: '"$_sRepoType"'.'

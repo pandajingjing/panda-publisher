@@ -27,6 +27,7 @@ else
     cd $sExecRepoCodeDir
     # 根据是否有$sRepoMerge, 将对应分支merge到$sRepoMaster分支
     if [ -z $sRepoMerge ]; then
+        switchBranch $sRepoType $sRepoMaster
         rebaseBranch $sRepoType $sRepoMaster
     else
         switchBranch $sRepoType $sRepoMerge
