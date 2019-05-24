@@ -5,14 +5,14 @@
         file:
             path: "{{ sDestDir }}/{{ _sVersion }}"
             state: directory
-            mode: 0755
+            mode: 0775
             group: "{{ sDeployGroup }}"
             owner: "{{ sDeployUser }}"
     -   name: "extract {{ _sCodeTarFilePath }} to {{ sDestDir }}/{{ _sVersion }}"
         unarchive:
             src: "{{ _sCodeTarFilePath }}"
             dest: "{{ sDestDir }}/{{ _sVersion }}"
-            mode: 0755
+            mode: 0775
             group: "{{ sDeployGroup }}"
             owner: "{{ sDeployUser }}"
             remote_src: no
