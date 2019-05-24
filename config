@@ -11,6 +11,7 @@ sFixDataInstallDir='/fix-data'
 sDynamicDataInstallDir='/dynamic-data'
 sLogInstallRootDir=$sDynamicDataInstallDir'/log'
 sAppRootDir=$sFixDataInstallDir'/app'
+sBinRootDir=$sFixDataInstallDir'/bin/'
 
 #dir we balabala all we need, do not modify these unless you exactly know what it means
 sExecTarDir=$sExecRootDir'/tar'

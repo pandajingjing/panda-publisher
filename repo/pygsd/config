@@ -1,0 +1,13 @@
+sRepoType='git'
+sRepoUrl='git@git.release.weiheinc.com:infrastructure/pygsd.git'
+sRepoSubDir='pygsd'
+
+sRepoMaster='master'
+sRepoMerge=''
+
+sAnsibleFiles='upload_single'
+
+sDestDir=$sBinRootDir'/pygsd'
+sLoader=''
+
+sRepoConfigVars=''

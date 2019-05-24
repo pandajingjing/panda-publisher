@@ -23,8 +23,8 @@ else
         showDebug $sRepoName' does not exist, we will get it from remote.'
         getRepo $sRepoType $sRepoUrl $sExecRepoCodeDir
     fi
-    # switch到$sRepoMaster分支用于发布
     cd $sExecRepoCodeDir
+    _sVersion=`/bin/date +%Y%m%d%H%M%S`
     # 根据是否有$sRepoMerge, 将对应分支merge到$sRepoMaster分支
     if [ -z $sRepoMerge ]; then
         switchBranch $sRepoType $sRepoMaster
@@ -32,18 +32,20 @@ else
     else
         switchBranch $sRepoType $sRepoMerge
         rebaseBranch $sRepoType $sRepoMerge
-        rebaseBranch $sRepoType $sRepoMaster
+        #rebaseBranch $sRepoType $sRepoMaster
         switchBranch $sRepoType $sRepoMaster
         rebaseBranch $sRepoType $sRepoMaster
-        _sComment='merge from '"$sRepoMerge"
+        _sComment=$sRepoName' merge from '"$sRepoMerge"' at '$_sVersion
         mergeBranch $sRepoType $sRepoMerge "$_sComment"
         # 确保$sRepoMerge是最新的版本
     fi
+    pushBranch $sRepoType "$sRepoMaster"
+    
     # 打标签
-    _sVersion=`/bin/date +%Y%m%d%H%M%S`
     _sTag="$sRepoName"'_'"$_sVersion"
     switchBranch $sRepoType $sRepoMaster
     tagBranch $sRepoType "$_sTag" "$sRepoMaster"
+    
     # 从仓库导出上线代码包
     _sCodeTarFilePath="$sExecCodeTarDir"'/'"$sRepoName"'_'"$_sVersion"'.tar.gz'
     exportCodeTar $sRepoType $sRepoMaster $_sCodeTarFilePath

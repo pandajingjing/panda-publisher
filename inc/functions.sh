@@ -145,6 +145,7 @@ function checkRepo(){
     showInfo 'check repo whether its right repo.'
     case "$_sRepoType" in
         git)
+            showDebug 'git remote get-url origin.'
             _sCurrentUrl=`$sExecGit remote get-url origin`
             if [ $_sCurrentUrl = $_sRepoUrl ]; then
                 return 1
@@ -218,7 +219,7 @@ function switchBranch(){
                 $sExecGit checkout -q "$_sBranch"
             else
                 showDebug 'git checkout '"$_sBranch"' from origin.'
-                $sExecGit checkout -q -b "$_sBranch" "origin/$_sBranch"
+                $sExecGit checkout -q "$_sBranch"
             fi
             ;;
         *) showError 'unsupport repo type: '"$_sRepoType"'.'
@@ -294,7 +295,7 @@ function tagBranch(){
         git)
             showDebug 'git tag '"$_sTag"'.'
             $sExecGit tag "$_sTag"
-            $sExecGit push -q origin "$_sBranch:$_sBranch"
+            $sExecGit push -q origin "$_sBranch:$_sBranch" --tags
             ;;
         *) showError 'unsupport repo type: '"$_sRepoType"'.'
             ;;
