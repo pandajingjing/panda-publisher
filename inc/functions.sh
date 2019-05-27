@@ -47,12 +47,13 @@ function showDebug(){
 
 #show help we need
 function showHelp() {
-    /bin/echo 'Usage: '`basename $1`' -p repo [-r [-v version]]'
+    /bin/echo 'Usage: '`basename $1`' -p repo [-r [-v version]] [-l]'
     /bin/echo `basename $1 .sh`' repo in the newest or reverse last version or specific version'
     /bin/echo 'we currently support git'
     /bin/echo '  -p repo'
     /bin/echo '  -r reverse'
     /bin/echo '  -v specific version'
+    /bin/echo '  -l list old version'
     /bin/echo '  -h show this help'
     exit 0
 }
@@ -77,11 +78,13 @@ function createDir(){
 function parseBin(){
     sReverse='no'
     sReverseVersion='last'
-    while getopts 'p:v:h:r' arg; do
+    while getopts 'p:v:hlr' arg; do
         case $arg in
             v) sReverseVersion=$OPTARG
                 ;;
             p) sRepoName=$OPTARG
+                ;;
+            l) sList='yes'
                 ;;
             r) sReverse='yes'
                 ;;
@@ -102,9 +105,14 @@ function parseBin(){
     
     sExecRepoDir=$sExecRepoRootDir'/'$sRepoName
     showDebug 'repo dir is: '"$sExecRepoDir"'.'
+    sExecVersionFile=$sExecVersionDir'/'$sRepoName'.ver'
+    showDebug 'version file is: '"$sExecVersionFile"'.'
         	
     if [ ! -d $sExecRepoDir ]; then
         showError 'repo('"$sRepoName"') does not exist.'
+    fi
+    if [ ! -f $sExecVersionFile ]; then
+        touch $sExecVersionFile
     fi
 }
 
@@ -322,4 +330,22 @@ function exportCodeTar(){
     if [ 0 -ne $? ]; then
         showError 'can not export '"$_sBranch"' into '"$_sCodeTarFilePath"'.'
     fi
+}
+
+#call ansible
+function callAnsible(){
+    _sAnsibleFiles=$1
+    _sVersion=$2
+    _sCodeTarFilePath=$3
+    _sYamlParam="sDeployServer=$sDeployServer sDeployUser=$sDeployUser sDeployGroup=$sDeployGroup sDestDir=$sDestDir _sVersion=$_sVersion _sCodeTarFilePath=$_sCodeTarFilePath sLoader=$sLoader sExecRemotePhp=$sExecRemotePhp"
+    for _sExecConfigName in $sRepoConfigVars
+    do
+        eval _sExecConfigValue="\$$_sExecConfigName"
+        _sYamlParam=$_sYamlParam' '$_sExecConfigName'='$_sExecConfigValue
+    done
+    for _sAnsibleFile in $_sAnsibleFiles
+    do
+        #echo 'a'
+        $sExecAnsiblePlaybook -v -i "$sExecRootDir"/hosts -e "$_sYamlParam" "$sExecRootDir"/yaml/"$_sAnsibleFile".yaml
+    done
 }

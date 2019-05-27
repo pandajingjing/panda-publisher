@@ -7,8 +7,25 @@ sExecRootDir=`/bin/readlink -f $sExecCurrentDir/`
 
 source $sExecRootDir'/inc/initial.sh'
 
-if [ 'yes' = $sReverse ]; then #
-    echo
+if [ 'yesx' = "$sList"'x' ]; then
+    showInfo 'show repo version list.'
+    /bin/cat $sExecVersionFile
+elif [ 'yesx' = "$sReverse"'x' ]; then #
+    echo 'reverse'
+    echo $sReverseVersion
+    if [ 'lastx' = "$sReverseVersion"'x' ]; then
+        _sReverseVersion=`/usr/bin/head -2 $sExecVersionFile | /usr/bin/tail -1` #查找最新一个版本
+    else
+        /bin/grep "$sReverseVersion" $sExecVersionFile > /dev/null
+        if [ $? -ne 0 ]; then #没有找到
+            showError 'we cant find version '"$sReverseVersion"'.'
+        else #找到了
+            showDebug 'we find version '"sReverseVersion"'.'
+            _sReverseVersion=$sReverseVersion
+        fi
+    fi
+    showInfo 'reverse version to '$_sReverseVersion'.'
+    callAnsible 'switch_version' $_sReverseVersion $_sCodeTarFilePath
 else
     # 确保$CodeDir中是正确的代码库
     if [ -d $sExecRepoCodeDir ]; then #代码文件夹存在, 查看代码库是否正确
@@ -51,18 +68,14 @@ else
     exportCodeTar $sRepoType $sRepoMaster $_sCodeTarFilePath
     # 根据$sAnsibleFiles, 执行对应的发布操作
     if [ -n "$sAnsibleFiles" ]; then
-        _sYamlParam="sDeployServer=$sDeployServer sDeployUser=$sDeployUser sDeployGroup=$sDeployGroup sDestDir=$sDestDir _sVersion=$_sVersion _sCodeTarFilePath=$_sCodeTarFilePath sLoader=$sLoader sExecRemotePhp=$sExecRemotePhp"
-        for _sExecConfigName in $sRepoConfigVars
-        do
-            eval _sExecConfigValue="\$$_sExecConfigName"
-            _sYamlParam=$_sYamlParam' '$_sExecConfigName'='$_sExecConfigValue
-        done
-        for _sAnsibleFile in $sAnsibleFiles
-        do
-            $sExecAnsiblePlaybook -v -i "$sExecRootDir"/hosts -e "$_sYamlParam" "$sExecRootDir"/yaml/"$_sAnsibleFile".yaml
-        done
+        callAnsible "$sAnsibleFiles" $_sVersion $_sCodeTarFilePath
     fi
-    # 记录仓库版本号日志, 用于回滚判定
+    # 记录仓库版本号日志, 用于回滚判定, 只记录50个版本
+    showDebug 'record version('$_sVersion') into '$sExecVersionFile'.'
+    _sExecVersionFileTmp=$sExecVersionFile'.tmp'
+    /usr/bin/head -49 $sExecVersionFile > $_sExecVersionFileTmp
+    /bin/echo $_sVersion > $sExecVersionFile
+    /bin/cat $_sExecVersionFileTmp >> $sExecVersionFile
+    /bin/rm -rf $_sExecVersionFileTmp
+    showInfo 'our job here is done.'
 fi
-
-#回滚???
