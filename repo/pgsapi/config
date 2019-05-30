@@ -1,6 +1,6 @@
 sRepoType='git'
 sRepoUrl='git@git.release.weiheinc.com:php/code.git'
-sRepoSubDir='joe-api'
+sRepoSubDir='pgsapi'
 
 sRepoMaster='master'
 sRepoMerge='develop'
@@ -9,7 +9,7 @@ sAnsibleFiles='upload_version clear_laravel_cache switch_version'
 
 sDestDir=$sAppRootDir'/php-release'
 
-sLoader='api'
+sLoader='pgsapi'
 sAppVersionDir=$sAppRootDir'/version'
 sAppIndexDir=$sAppRootDir'/index'
 sRepoConfigVars='sLoader sAppVersionDir sAppIndexDir'

@@ -8,6 +8,5 @@ sRepoMerge=''
 sAnsibleFiles='upload_single'
 
 sDestDir=$sBinRootDir'/pygsd'
-sLoader=''
 
 sRepoConfigVars=''

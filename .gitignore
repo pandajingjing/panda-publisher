@@ -11,4 +11,5 @@
 #self
 /tar
 /temp
+/version
 wget-log

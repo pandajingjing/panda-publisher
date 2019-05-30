@@ -8,6 +8,5 @@ sRepoMerge=''
 sAnsibleFiles='upload_single'
 
 sDestDir=$sAppRootDir'/index'
-sLoader=''
 
 sRepoConfigVars=''
