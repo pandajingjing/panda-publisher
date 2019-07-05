@@ -5,6 +5,8 @@ sRepoSubDir='pygsd'
 sRepoMaster='master'
 sRepoMerge=''
 
+sCustomCodeTar='no'
+
 sAnsibleFiles='upload_single'
 
 sDestDir=$sBinRootDir'/pygsd'

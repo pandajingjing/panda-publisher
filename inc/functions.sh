@@ -118,12 +118,12 @@ function parseBin(){
 
 #load repo file
 function loadRepoFile(){
-    sExecRepoFile=$sExecRepoDir'/'$1
-    if [ -f $sExecRepoFile ];then
-        showDebug 'load repo '"$1"' file: '"$sExecRepoFile"'.'
-        source $sExecRepoFile
+    _sExecRepoFile=$sExecRepoDir'/'$1
+    if [ -f $_sExecRepoFile ];then
+        showDebug 'load repo '"$1"' file: '"$_sExecRepoFile"'.'
+        source $_sExecRepoFile
     else
-        showError "$sExecRepoFile"' does not exist.'
+        showError "$_sExecRepoFile"' does not exist.'
     fi
 }
 
@@ -337,7 +337,7 @@ function callAnsible(){
     _sAnsibleFiles=$1
     _sVersion=$2
     _sCodeTarFilePath=$3
-    _sYamlParam="sDeployServer=$sDeployServer sDeployUser=$sDeployUser sDeployGroup=$sDeployGroup sDestDir=$sDestDir _sVersion=$_sVersion _sCodeTarFilePath=$_sCodeTarFilePath sLoader=$sLoader sExecRemotePhp=$sExecRemotePhp"
+    _sYamlParam="sDeployServer=$sDeployServer sDeployUser=$sDeployUser sDeployGroup=$sDeployGroup sDestDir=$sDestDir sVersion=$_sVersion sCodeTarFilePath=$_sCodeTarFilePath sLoader=$sLoader sExecRemotePhp=$sExecRemotePhp"
     for _sExecConfigName in $sRepoConfigVars
     do
         eval _sExecConfigValue="\$$_sExecConfigName"

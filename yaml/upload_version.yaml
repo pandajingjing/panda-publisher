@@ -1,17 +1,17 @@
 -   hosts: "{{ sDeployServer }}"
     remote_user: "{{ sDeployUser }}"
     tasks:
-    -   name: "create dir {{ sDestDir }}/{{ _sVersion }}"
+    -   name: "create dir {{ sDestDir }}/{{ sVersion }}"
         file:
-            path: "{{ sDestDir }}/{{ _sVersion }}"
+            path: "{{ sDestDir }}/{{ sVersion }}"
             state: directory
             mode: 0775
             group: "{{ sDeployGroup }}"
             owner: "{{ sDeployUser }}"
-    -   name: "extract {{ _sCodeTarFilePath }} to {{ sDestDir }}/{{ _sVersion }}"
+    -   name: "extract {{ sCodeTarFilePath }} to {{ sDestDir }}/{{ sVersion }}"
         unarchive:
-            src: "{{ _sCodeTarFilePath }}"
-            dest: "{{ sDestDir }}/{{ _sVersion }}"
+            src: "{{ sCodeTarFilePath }}"
+            dest: "{{ sDestDir }}/{{ sVersion }}"
             mode: 0775
             group: "{{ sDeployGroup }}"
             owner: "{{ sDeployUser }}"

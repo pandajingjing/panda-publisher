@@ -8,9 +8,9 @@
             mode: 0775
             group: "{{ sDeployGroup }}"
             owner: "{{ sDeployUser }}"
-    -   name: "extract {{ _sCodeTarFilePath }} to {{ sDestDir }}"
+    -   name: "extract {{ sCodeTarFilePath }} to {{ sDestDir }}"
         unarchive:
-            src: "{{ _sCodeTarFilePath }}"
+            src: "{{ sCodeTarFilePath }}"
             dest: "{{ sDestDir }}"
             mode: 0775
             group: "{{ sDeployGroup }}"

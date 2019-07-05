@@ -5,6 +5,8 @@ sRepoSubDir='pgsapi'
 sRepoMaster='master'
 sRepoMerge='develop'
 
+sCustomCodeTar='no'
+
 sAnsibleFiles='upload_version clear_laravel_cache switch_version'
 
 sDestDir=$sAppRootDir'/php-release'

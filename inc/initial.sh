@@ -14,6 +14,6 @@ createDir $sExecCodeTarDir
 
 #create bin configure variables
 sRepoConfigFrameVars='sDeployUser sDeployGroup sDeployServer iDebug sFixDataInstallDir sDynamicDataInstallDir sLogInstallRootDir sAppRootDir sBinRootDir
-sExecCurrentDir sExecRootDir sExecTarDir sExecTempDir sExecRepoRootDir sExecVersionDir sExecGit sExecAnsiblePlaybook sExecRemotePhp
+sExecCurrentDir sExecRootDir sExecTarDir sExecTempDir sExecRepoRootDir sExecVersionDir sExecGit sExecAnsiblePlaybook sExecRemotePhp sExecLocalPhp sExecLocalNpm
 sRepoName sReverse sReverseVersion sExecRepoDir sExecVersionFile sExecRepoCodeDir sExecCodeTarDir
-sRepoType sRepoUrl sRepoSubDir sRepoMaster sRepoMerge sAnsibleFiles sDestDir'
+sRepoType sRepoUrl sRepoSubDir sRepoMaster sRepoMerge sCustomCodeTar sAnsibleFiles sDestDir'

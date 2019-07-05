@@ -9,6 +9,6 @@
             group: "{{ sDeployGroup }}"
             owner: "{{ sDeployUser }}"
     -   name: change the version
-        shell: "echo {{ _sVersion }} > code_{{ sLoader }}_web.ver && echo {{ _sVersion }} > console_{{ sLoader }}_console.ver"
+        shell: "echo {{ sVersion }} > code_{{ sLoader }}_web.ver && echo {{ sVersion }} > console_{{ sLoader }}_console.ver"
         args:
             chdir: "{{ sAppVersionDir }}"

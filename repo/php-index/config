@@ -5,6 +5,8 @@ sRepoSubDir='php-index'
 sRepoMaster='master'
 sRepoMerge=''
 
+sCustomCodeTar='no'
+
 sAnsibleFiles='upload_single'
 
 sDestDir=$sAppRootDir'/index'
