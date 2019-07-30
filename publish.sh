@@ -49,7 +49,8 @@ else
         #rebaseBranch $sRepoType $sRepoMaster
         switchBranch $sRepoType $sRepoMaster
         rebaseBranch $sRepoType $sRepoMaster
-        sComment=$sRepoName' merge from '"$sRepoMerge"' at '$sVersion
+        sGitCommentTime=`/bin/date +%Y%m%d%H%M`
+        sComment='['$sGitCommentTime'][merge]['$sRepoMerge']'
         mergeBranch $sRepoType $sRepoMerge "$sComment"
         # 确保$sRepoMerge是最新的版本
     fi

@@ -346,6 +346,10 @@ function callAnsible(){
     for _sAnsibleFile in $_sAnsibleFiles
     do
         #echo 'a'
-        $sExecAnsiblePlaybook -v -i "$sExecRootDir"/hosts -e "$_sYamlParam" "$sExecRootDir"/yaml/"$_sAnsibleFile".yaml
+        if [ $iDebug -eq 0 ]; then
+            $sExecAnsiblePlaybook -i "$sExecRootDir"/hosts -e "$_sYamlParam" "$sExecRootDir"/yaml/"$_sAnsibleFile".yaml
+        else
+            $sExecAnsiblePlaybook -v -i "$sExecRootDir"/hosts -e "$_sYamlParam" "$sExecRootDir"/yaml/"$_sAnsibleFile".yaml
+        fi
     done
 }

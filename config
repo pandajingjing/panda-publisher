@@ -4,7 +4,7 @@ sDeployGroup='app'
 sDeployServer='newwebservers'
 
 #frame configuration
-iDebug=1
+iDebug=0
 
 #dir we put all stuff
 sFixDataInstallDir='/fix-data'
