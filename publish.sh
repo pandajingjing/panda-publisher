@@ -50,7 +50,7 @@ else
         switchBranch $sRepoType $sRepoMaster
         rebaseBranch $sRepoType $sRepoMaster
         sGitCommentTime=`/bin/date +%Y%m%d%H%M`
-        sComment='('$sGitCommentTime')(merge)('$sRepoMerge')'
+        sComment=$sGitCommentTime'_merge_'$sRepoMerge''
         mergeBranch $sRepoType $sRepoMerge "$sComment"
         # 确保$sRepoMerge是最新的版本
     fi
