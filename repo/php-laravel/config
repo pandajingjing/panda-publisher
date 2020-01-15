@@ -1,0 +1,14 @@
+sRepoType='git'
+sRepoUrl='git@git.release.weiheinc.com:infrastructure/php-laravel.git'
+sRepoSubDir='php-laravel'
+
+sRepoMaster='master'
+sRepoMerge=''
+
+sCustomCodeTar='no'
+
+sAnsibleFiles='upload_single'
+
+sDestDir=$sAppRootDir'/php-release/laravel-6.8'
+
+sRepoConfigVars=''

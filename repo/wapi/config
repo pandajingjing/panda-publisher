@@ -1,0 +1,17 @@
+sRepoType='git'
+sRepoUrl='git@git.release.weiheinc.com:php/code-w.git'
+sRepoSubDir='wapi'
+
+sRepoMaster='master'
+sRepoMerge='develop'
+
+sCustomCodeTar='no'
+
+sAnsibleFiles='upload_version clear_laravel_cache switch_version'
+
+sDestDir=$sAppRootDir'/php-release'
+
+sLoader='wapi'
+sAppVersionDir=$sAppRootDir'/version'
+sAppIndexDir=$sAppRootDir'/index'
+sRepoConfigVars='sLoader sAppVersionDir sAppIndexDir'

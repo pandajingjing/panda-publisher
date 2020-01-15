@@ -1,0 +1,9 @@
+#create code tar to upload
+function createCodeTar(){
+    _sExecRepoCodeDir=$1
+    _sCodeTarFilePath=$2
+    
+    cd $_sExecRepoCodeDir
+    $sExecLocalPhp composer.phar -vvv update 
+    /bin/tar -Zcf $_sCodeTarFilePath ./
+}
