@@ -1,6 +1,6 @@
 sRepoType='git'
 sRepoUrl='git@git.release.weiheinc.com:php/code-w.git'
-sRepoSubDir='wapi'
+sRepoSubDir='mapi'
 
 sRepoMaster='master'
 sRepoMerge='develop'
@@ -11,7 +11,7 @@ sAnsibleFiles='upload_version switch_version'
 
 sDestDir=$sAppRootDir'/php-release'
 
-sLoader='wapi'
+sLoader='mapi'
 sAppVersionDir=$sAppRootDir'/version'
 sAppIndexDir=$sAppRootDir'/index'
 sRepoConfigVars='sLoader sAppVersionDir sAppIndexDir'
