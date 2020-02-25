@@ -136,7 +136,7 @@ function getRepo(){
     case "$_sRepoType" in
         git)
             showDebug 'git clone from '"$_sRepoUrl"' to '"$_sCodeDir"'.'
-            $sExecGit clone -q $_sRepoUrl $_sCodeDir
+            $sExecLocalGit clone -q $_sRepoUrl $_sCodeDir
             ;;
         ?) showError 'unsupport repo type: '"$_sRepoType"'.'
             ;;
@@ -154,7 +154,7 @@ function checkRepo(){
     case "$_sRepoType" in
         git)
             showDebug 'git remote get-url origin.'
-            _sCurrentUrl=`$sExecGit remote get-url origin`
+            _sCurrentUrl=`$sExecLocalGit remote get-url origin`
             if [ $_sCurrentUrl = $_sRepoUrl ]; then
                 return 1
             else
@@ -173,7 +173,7 @@ function fetchRepo(){
     case "$_sRepoType" in
         git)
             showDebug 'git fetch origin.'
-            $sExecGit fetch -q origin
+            $sExecLocalGit fetch -q origin
             ;;
         *) showError 'unsupport repo type: '"$_sRepoType"'.'
             ;;
@@ -190,10 +190,10 @@ function _checkBranch(){
     showDebug 'check branch status.'
     case "$_sRepoType" in
         git)
-            $sExecGit branch | /bin/grep "$_sBranch" > /dev/null
+            $sExecLocalGit branch | /bin/grep "$_sBranch" > /dev/null
             if [ 0 -eq $? ]; then
                 showDebug 'we got local branch('"$_sBranch"').'
-                $sExecGit branch | /bin/grep "* $_sBranch" > /dev/null
+                $sExecLocalGit branch | /bin/grep "* $_sBranch" > /dev/null
                 if [ 0 -eq $? ]; then
                     showDebug 'we got current branch.'
                     return 2
@@ -224,10 +224,10 @@ function switchBranch(){
                 showDebug 'we do nothing.'
             elif [ 1 -eq $_iReturn ]; then
                 showDebug 'git checkout '"$_sBranch"' from local.'
-                $sExecGit checkout -q "$_sBranch"
+                $sExecLocalGit checkout -q "$_sBranch"
             else
                 showDebug 'git checkout '"$_sBranch"' from origin.'
-                $sExecGit checkout -q "$_sBranch"
+                $sExecLocalGit checkout -q "$_sBranch"
             fi
             ;;
         *) showError 'unsupport repo type: '"$_sRepoType"'.'
@@ -246,7 +246,7 @@ function rebaseBranch(){
     case "$_sRepoType" in
         git)
             showDebug 'git rebase origin/'"$_sBranch"'.'
-            $sExecGit rebase -q "origin/$_sBranch"
+            $sExecLocalGit rebase -q "origin/$_sBranch"
             ;;
         *) showError 'unsupport repo type: '"$_sRepoType"'.'
             ;;
@@ -265,7 +265,7 @@ function mergeBranch(){
     case "$_sRepoType" in
         git)
             showDebug 'git merge '"$_sBranch"' with comment: '"$_sComment"'.'
-            $sExecGit merge -q --no-ff $_sBranch -m "$_sComment"
+            $sExecLocalGit merge -q --no-ff $_sBranch -m "$_sComment"
             ;;
         *) showError 'unsupport repo type: '"$_sRepoType"'.'
             ;;
@@ -283,7 +283,7 @@ function pushBranch(){
     case "$_sRepoType" in
         git)
             showDebug 'git push origin '"$_sBranch:$_sBranch"'.'
-            $sExecGit push -q origin "$_sBranch:$_sBranch"
+            $sExecLocalGit push -q origin "$_sBranch:$_sBranch"
             ;;
         *) showError 'unsupport repo type: '"$_sRepoType"'.'
             ;;
@@ -302,8 +302,8 @@ function tagBranch(){
     case "$_sRepoType" in
         git)
             showDebug 'git tag '"$_sTag"'.'
-            $sExecGit tag "$_sTag"
-            $sExecGit push -q origin "$_sBranch:$_sBranch" --tags
+            $sExecLocalGit tag "$_sTag"
+            $sExecLocalGit push -q origin "$_sBranch:$_sBranch" --tags
             ;;
         *) showError 'unsupport repo type: '"$_sRepoType"'.'
             ;;
@@ -322,7 +322,7 @@ function exportCodeTar(){
     case "$_sRepoType" in
         git)
             showDebug 'git archive '"$_sBranch"' into '"$_sCodeTarFilePath"'.'
-            $sExecGit archive --format 'tar.gz' --output "$_sCodeTarFilePath" $_sBranch
+            $sExecLocalGit archive --format 'tar.gz' --output "$_sCodeTarFilePath" $_sBranch
             ;;
         *) showError 'unsupport repo type: '"$_sRepoType"'.'
             ;;

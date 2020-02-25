@@ -2,6 +2,7 @@
     remote_user: "{{ sDeployUser }}"
     tasks:
     -   name: composer update
-        shell: "ls;{{ sExecRemotePhp }} composer.phar update -vvv > {{ sDestDir }}/nohup.out"
-        args:
-            chdir: "{{ sDestDir }}"
+        composer:
+            command: install
+            executable: "{{sExecRemotePhp}}"
+            working_dir: "{{sDestDir}}"
