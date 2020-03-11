@@ -1,16 +1,23 @@
+#repo
 sRepoType='git'
 sRepoUrl='git@git.release.weiheinc.com:php/code.git'
 sRepoSubDir='lbsapi'
 
+#branch
 sRepoMaster='master'
 sRepoMerge='develop'
 
+#custom
 sCustomCodeTar='no'
 
+#ansible
 sAnsibleFiles='upload_version clear_laravel_cache switch_version'
 
+#remote
 sDestDir=$sAppRootDir'/php-release'
+#sDeployServer='new_servers'
 
+#current
 sLoader='lbsapi'
 sAppVersionDir=$sAppRootDir'/version'
 sAppIndexDir=$sAppRootDir'/index'

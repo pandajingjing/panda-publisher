@@ -1,7 +1,7 @@
 #env user and group
 sDeployUser='deployer'
 sDeployGroup='app'
-sDeployServer='newwebservers'
+sDeployServer='online_servers'
 
 #frame configuration
 iDebug=0
@@ -20,7 +20,7 @@ sExecRepoRootDir=$sExecRootDir'/repo'
 sExecVersionDir=$sExecRootDir'/version'
 sExecAnsiblePlaybook='/usr/bin/ansible-playbook'
 sExecLocalGit='/usr/bin/git'
-sExecLocalPhp='/usr/bin/php7.0'
+sExecLocalPhp='php'
 sExecLocalNpm='/usr/bin/npm'
 sExecLocalComposer='/usr/local/bin/composer'
-sExecRemotePhp='/fix-data/bin/php-7.0.25/bin/php'
+sExecRemotePhp='php'

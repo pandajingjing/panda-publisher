@@ -1,16 +1,23 @@
+#repo
 sRepoType='git'
 sRepoUrl='git@git.release.weiheinc.com:php/code-w.git'
 sRepoSubDir='wxapi'
 
+#branch
 sRepoMaster='master'
 sRepoMerge='develop'
 
+#custom
 sCustomCodeTar='no'
 
+#ansible
 sAnsibleFiles='upload_version switch_version'
 
+#remote
 sDestDir=$sAppRootDir'/php-release'
+sDeployServer='new_servers'
 
+#current
 sLoader='wxapi'
 sAppVersionDir=$sAppRootDir'/version'
 sAppIndexDir=$sAppRootDir'/index'

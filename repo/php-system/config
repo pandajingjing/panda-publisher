@@ -1,14 +1,21 @@
+#repo
 sRepoType='git'
 sRepoUrl='git@git.release.weiheinc.com:infrastructure/php-system.git'
 sRepoSubDir='php-system'
 
+#branch
 sRepoMaster='master'
 sRepoMerge=''
 
+#custom
 sCustomCodeTar='no'
 
+#ansible
 sAnsibleFiles='upload_single'
 
+#remote
 sDestDir=$sAppRootDir'/php-release/system'
+#sDeployServer='new_servers'
 
+#current
 sRepoConfigVars=''
