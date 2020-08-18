@@ -1,13 +1,12 @@
 [all_servers]
 cn-sh-app-001 ansible_ssh_host=47.101.194.70 ansible_ssh_port=54729
-cn-sh-app-002 ansible_ssh_host=47.100.197.107 ansible_ssh_port=54729
 cn-sh-app-004 ansible_ssh_host=101.132.164.163 ansible_ssh_port=54729
 
 [online_servers]
 cn-sh-app-001 ansible_ssh_host=47.101.194.70 ansible_ssh_port=54729
-cn-sh-app-002 ansible_ssh_host=47.100.197.107 ansible_ssh_port=54729
 
 [new_servers]
+cn-sh-app-001 ansible_ssh_host=47.101.194.70 ansible_ssh_port=54729
 cn-sh-app-004 ansible_ssh_host=101.132.164.163 ansible_ssh_port=54729
 
 [dev_servers]

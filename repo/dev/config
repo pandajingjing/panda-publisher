@@ -1,0 +1,27 @@
+#env user and group
+sDeployUser='app'
+sDeployGroup='app'
+
+#repo
+sRepoType='git'
+sRepoUrl='git@git.release.weiheinc.com:php/code-w.git'
+
+#branch
+sRepoMaster='master'
+sRepoMerge='develop'
+
+#custom
+sCustomCodeTar='no'
+
+#ansible
+sAnsibleFiles='upload_single'
+
+#remote
+sDestDir=$sAppRootDir'/php-dev'
+sDeployServer='dev_servers'
+
+#current
+sLoader='wapi'
+sAppVersionDir=$sAppRootDir'/version'
+sAppIndexDir=$sAppRootDir'/index'
+sRepoConfigVars='sLoader sAppVersionDir sAppIndexDir'

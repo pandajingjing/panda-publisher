@@ -5,7 +5,7 @@
 sExecCurrentDir=$(cd "$(dirname "$0")"; /bin/pwd)
 sExecRootDir=`/bin/readlink -f $sExecCurrentDir/`
 
-source $sExecRootDir'/inc/initial.sh'
+source $sExecRootDir'/inc/initial_release.sh'
 
 if [ 'yesx' = "$sList"'x' ]; then
     showInfo 'show repo version list.'
